@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, 
@@ -14,7 +15,8 @@ import {
   History,
   Loader2,
   Video,
-  Menu
+  Menu,
+  Globe
 } from 'lucide-react';
 import { StatCard } from './StatCard';
 import { ViolenceMap } from './ViolenceMap';
@@ -24,6 +26,7 @@ import { ParliamentaryAnalytics } from './ParliamentaryAnalytics';
 import { DailyOpEd } from './DailyOpEd';
 import { Chatbot } from './Chatbot';
 import { VideoIntel } from './VideoIntel';
+import { ContinentalLedger } from './ContinentalLedger';
 import { ViewState, Incident, Candidate, ParliamentaryCandidate, Language } from '../types';
 import { PARLIAMENTARY_DATA } from '../data/parliamentaryData';
 import { fetchRecentIncidents, fetchLiveCandidateStats } from '../services/geminiService';
@@ -39,7 +42,6 @@ interface DashboardProps {
   onReturnToSite: () => void;
 }
 
-// Added missing React import to fix 'Cannot find namespace React' error
 export const Dashboard: React.FC<DashboardProps> = ({ onReturnToSite }) => {
   const [currentView, setCurrentView] = useState<ViewState>(ViewState.DASHBOARD);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -78,6 +80,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onReturnToSite }) => {
       sitrep: 'Daily SitRep',
       mugi: 'Strategic Core',
       video: 'Video Forensics',
+      ledger: 'Continental Ledger',
       status: 'Mugi-Solo Burundi Status',
       activeSync: '90-Day Live Sync Active: 18 Provinces online.',
       exit: 'Exit',
@@ -95,6 +98,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onReturnToSite }) => {
       sitrep: 'SitRep Quotidien',
       mugi: 'Noyau Stratégique',
       video: 'Forensique Vidéo',
+      ledger: 'Registre Continental',
       status: 'Statut Mugi-Solo Burundi',
       activeSync: 'Synchro 90j Active : 18 Provinces en ligne.',
       exit: 'Sortie',
@@ -112,6 +116,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onReturnToSite }) => {
       sitrep: 'Inkuru ya buri munsi',
       mugi: 'Ubumenyi bwa Mugi-Solo',
       video: 'Ivyerekeye Amashusho',
+      ledger: 'Ibitabo vyo mu Karere',
       status: 'Uko Mugi-Solo yifashe',
       activeSync: '90-Day Live Sync: Intara 18 zirahujwe.',
       exit: 'Gusohoka',
@@ -156,6 +161,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onReturnToSite }) => {
       case ViewState.DAILY_OPED: return <DailyOpEd incidents={incidents} candidates={cabinetMembers} language={language} />;
       case ViewState.ANALYSIS: return <ReportAnalyzer language={language} />;
       case ViewState.VIDEO_INTEL: return <VideoIntel language={language} />;
+      case ViewState.CONTINENTAL_LEDGER: return <ContinentalLedger language={language} />;
       default: return <div>Not Found</div>;
     }
   };
@@ -172,6 +178,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onReturnToSite }) => {
         <nav className="p-6 space-y-2">
           {[
             { id: ViewState.DASHBOARD, icon: LayoutDashboard, label: t.dashboard },
+            { id: ViewState.CONTINENTAL_LEDGER, icon: Globe, label: t.ledger },
             { id: ViewState.ANALYSIS, icon: BrainCircuit, label: t.mugi },
             { id: ViewState.VIOLENCE_MAP, icon: ShieldAlert, label: t.security },
             { id: ViewState.CABINET, icon: Users, label: t.cabinet },

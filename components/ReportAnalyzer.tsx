@@ -49,14 +49,13 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language = Langu
   const reportContainerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Aggressive text cleaning for professional display
+  // Aggressive text cleaning for professional display as requested
   const cleanReportText = (text: string) => {
     if (!text) return "";
     return text
-      .replace(/\*/g, '') // Remove asterisks
-      .replace(/#/g, '')  // Remove hashes
-      .replace(/_{1,2}/g, '') // Remove underscores
-      .replace(/`{1,3}/g, '') // Remove backticks
+      .replace(/[\*#\[\]]/g, '') // Strip symbols: * # [ ]
+      .replace(/_{1,2}/g, '')    // Strip underscores
+      .replace(/`{1,3}/g, '')    // Strip backticks
       .trim();
   };
 

@@ -151,6 +151,29 @@ export interface GroundingChunk {
   };
 }
 
+export interface Country {
+  name: string;
+  region: 'Maghreb' | 'Sahel' | 'Great Lakes' | 'Horn of Africa' | 'West Africa' | 'Southern Africa' | 'Central Africa' | 'East Africa';
+  stabilityIndex: 'Stable' | 'Fragile' | 'Failing' | 'Active Conflict';
+  iso: string;
+}
+
+export interface CountrySitrep {
+  country: string;
+  politicalStability: string;
+  militaryPosture: string;
+  financialIntegrity: string;
+  culturalDynamics: string;
+  externalInfluences: {
+    actor: string;
+    footprint: string;
+    objective: string;
+  }[];
+  strategicVerdict: string;
+  forecast30d: string;
+  sources: GroundingChunk[];
+}
+
 export enum ViewState {
   DASHBOARD = 'DASHBOARD',
   VIOLENCE_MAP = 'VIOLENCE_MAP',
@@ -159,7 +182,8 @@ export enum ViewState {
   ANALYSIS = 'ANALYSIS',
   MP_ANALYTICS = 'MP_ANALYTICS',
   DAILY_OPED = 'DAILY_OPED',
-  VIDEO_INTEL = 'VIDEO_INTEL'
+  VIDEO_INTEL = 'VIDEO_INTEL',
+  CONTINENTAL_LEDGER = 'CONTINENTAL_LEDGER'
 }
 
 export enum Language {

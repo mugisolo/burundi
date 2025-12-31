@@ -39,7 +39,6 @@ export const Chatbot: React.FC<ChatbotProps> = ({ language = Language.FRENCH }) 
     { role: 'model', text: translations.greeting }
   ]);
 
-  // Update greeting when language changes if it's the only message
   useEffect(() => {
     if (messages.length === 1) {
       setMessages([{ role: 'model', text: translations.greeting }]);
@@ -56,8 +55,17 @@ export const Chatbot: React.FC<ChatbotProps> = ({ language = Language.FRENCH }) 
     scrollToBottom();
   }, [messages, isOpen]);
 
+  // Robust cleaner to remove markdown artifacts as requested
+  const cleanContent = (text: string) => {
+    if (!text) return "";
+    return text
+      .replace(/[\*#\[\]]/g, '') // Remove *, #, [, ]
+      .replace(/_{1,2}/g, '')    // Remove underscores
+      .trim();
+  };
+
   const renderContent = (content: any) => {
-    if (typeof content === 'string') return content;
+    if (typeof content === 'string') return cleanContent(content);
     if (typeof content === 'number' || typeof content === 'boolean') return String(content);
     return JSON.stringify(content, null, 2);
   };
@@ -121,12 +129,12 @@ export const Chatbot: React.FC<ChatbotProps> = ({ language = Language.FRENCH }) 
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-900/95">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] p-3 rounded-lg text-sm leading-relaxed ${
+                <div className={`max-w-[85%] p-4 rounded-lg text-sm leading-relaxed ${
                   msg.role === 'user' 
-                    ? 'bg-blue-600 text-white rounded-tr-none' 
-                    : 'bg-slate-800 text-slate-200 border border-slate-700 rounded-tl-none font-serif'
+                    ? 'bg-blue-600 text-white rounded-tr-none shadow-lg' 
+                    : 'bg-slate-800 text-slate-200 border border-slate-700 rounded-tl-none font-serif shadow-inner'
                 }`}>
-                  <pre className="whitespace-pre-wrap font-inherit">{renderContent(msg.text)}</pre>
+                  <div className="whitespace-pre-wrap font-inherit">{renderContent(msg.text)}</div>
                 </div>
               </div>
             ))}
